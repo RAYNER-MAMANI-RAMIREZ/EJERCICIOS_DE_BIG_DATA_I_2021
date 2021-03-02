@@ -1,0 +1,102 @@
+---
+title: "tema 1(Tarea 1 Big Data)"
+author: "Rayner Mamani Ramirez"
+date: "2/3/2021"
+output: html_document
+---
+## TAREA 2:
+
+  * Ejemplo
+ 
+investigar como crear funciones en R y desarrolle una  funcion que dado un vestor numerico de numeros enteros , debuelva
+
+  + a). los numeros  de los numeros pares 
+  + b). la suma de l vector
+  + c). el coeficiente de variacion  del    vertor
+
+**Solucion:**
+  + a)
+  
+```{r}
+rm(list = ls()) # tenemos vasia la memorioa 
+# prueba 1
+u1<-c(-6,-5,-4,-3,-2,0,-1,1,2,3,4,5,6)
+u1%%2  # encontra generer los pares = 0
+p1<-(u1%%2==0)
+pares<-u1[p1]  # generamos las pares 
+pares
+# prueva 2
+# con funcion
+
+fx<-function(x){
+  y1<-x%%2==0
+  pares<-x[y1]
+  return(pares)
+}
+x<-c(-6:6)
+pares<-fx(x)
+pares
+c1<-c(0:20)
+# los numeros pares 
+fx(c1)
+c2<-fx(c1)
+c2
+```
+  + b) La suma del vertor generado por a)
+  
+```{r}
+gx<-function(p11){
+  g1<-fx(p11)
+  g2<-sum(g1)
+  return(g2)
+  
+}
+c1
+# la suma de los numeros pares 
+gx(c1)
+# otra manera 
+fx(c1)
+suma<-sum(fx(c1))
+
+suma
+```
+  + c) veamos lo siguiente 
+<https://www.pinterest.com/pin/567805465503836162/>
+```{r}
+# Cv(x)=(desviacion estandar(x)/media(x))*100
+c1
+kx<-function(r){
+  h1<-fx(r)
+  h2<-gx(r)
+  cv<-sd(h1)/mean(h1)
+  return(cv)
+  
+}
+# el vector definido
+c1
+# los numores pares
+fx(c1)
+# la suma de los numeros pares 
+gx(c1)
+# coeficiente de variacion
+kx(c1)
+# otra forma
+c2
+var(c2)
+sd(c2)
+
+```
+En lo general
+```{r}
+ggx<-function(j){
+  nunpares<-fx(j)
+  suma<-gx(j)
+  CV<-kx(j)
+  ejemplo<-list(numeros_pares=nunpares,suma_num_pares=suma,
+                coeficiente_var=CV)
+  return(ejemplo)
+}
+c2<-c(0:25)
+ggx(c2)
+
+```
