@@ -1,0 +1,153 @@
+---
+title: "TAREA (Estadistica disciptiva)"
+author: "Rayner Mamani Ramirez"
+date: "15/3/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+rm(list = ls())
+load(url("https://github.com/AlvaroLimber/EST-383/raw/master/data/eh19.RData"))
+library(dplyr)
+aux<-unique(eh19p$s02a_05)
+bdj<-eh19p%>%filter(s02a_05==aux[1])
+# s02a_02   exo
+# s02a_03   edad
+# s02a_10  estado civil
+att<-attributes(eh19p)
+# att$variable.labels 
+# att$names
+bdj<-bdj%>%select(folio,depto,area,s02a_02,s02a_03,s02a_10,p0,pext0,niv_ed,niv_ed_g,aestudio) 
+#**** seleccion de variables para la vivienda 
+bdv<-eh19v%>%select(folio,s01a_06,s01a_08,s01a_09,s01a_10,s01a_15,s01a_16)
+# UNIR las bases de dstos
+bdj<-merge(bdj,bdv,"folio")
+t5<-table(bdj$depto,bdj$s02a_02)# una tabla de departamentos, sexo
+t5
+chisq.test(t5)
+```
+#*******************************************************
+
+# TAREA # 1
+
+*Veamos ahoara el planteamiento de la hipotesis*
+
+1. En primer lugar se debe plantear las hipótesis que someteremos a prueba
+Nota:
+  * En esta prueba estadística siempre la hipótesis nula plantea que las variables analizadas son independientes.
+
+ Ho:El departamento del jefe/a  es independiente del sexo del jefe/a del hogar
+ 
+ H1:El departamento del jefe/a  depende del sexo del jefe/a del hogar.
+
+si $$\alpha =0.05$$
+
+valor tabla 
+# numero de categorias (n=9 departamentos )
+# 6= numero de categorias - 1= (n-1)
+```{r}
+qchisq(0.95,8)
+```
+
+ * si p_valor > \alpha , entonces se acepta Ho.
+ * si p_valor < \alpha , entonces se rechaza Ho.
+ 
+como chi_calculado = 74.447 > chi_tabla = 15.50731  , entonces se rechaza Ho.
+
+como el valor de p=0.0000000000006365 < alfa=0.05, entonces se rechaza  Ho
+
+conclucion:
+
+No hay evidencia suficiente para indicar que no hay relacion entre las dos variables.
+
+NOTA: recordemos que es muy util(en el ambito social)
+y esto podemos ver en el siguyiente ejemplo:
+<https://www.medwave.cl/link.cgi/Medwave/Series/MBE04/5266>
+```{r}
+# continuando
+# tambien podemos ver el siguinete ejemplo
+table(bdj$niv_ed,bdj$s02a_02)
+chisq.test(table(bdj$niv_ed,bdj$s02a_02)) # nivel de educacion y sexo
+```
+Ho:El nivel de educacion  es independiente del sexo del jefe/a del hogar
+
+H1:El nivel de educacion depende del sexo del jefe/a del hogar.
+
+si $$\alpha =0.05$$
+
+valor tabla 
+```{r}
+# numero de categorias (n=7)
+# 6= numero de categorias - 1= (n-1)
+qchisq(0.95,6)
+``` 
+como chi_calculado = 542 > chi_tabla = 12.59159  , entonces se rechaza Ho.
+
+como el valor de p=0.00000000000000022 < alfa=0.05, entonces se rechaza  Ho
+
+conclucion:
+
+No hay evidencia suficiente para indicar que no hay relacion entre las dos variables.
+
+# NOTA:
+
+  • Cuando se rechaza Ho, es una decisión
+“fuerte”: hay una evidencia significativa
+que la hipótesis nula es falsa.
+
+  • Cuando se acepta Ho, es una decisión
+“débil”: Esto no significa que Ho es
+verdad. Sólo significa que no hay
+evidencia para rechazar a la hipótesis
+nula.
+
+
+
+#**************************************************************
+
+# TAREA  # 2
+
+
+# Coeficiente de asimetria y curtosis
+mas a detallle podemos ver aqui:
+<https://www.universoformulas.com/estadistica/descriptiva/asimetria-curtosis/>teoria
+
+ASIMETRIA 
+
+  * Coeficiente de asimetría basado en momentos
+  * asimetria = momento 3/ (desviacion estandar )^3
+desicion:
+si asimetría=0  Distribución simétrica
+si asimetría>0  Distribución asimétrica a la derecha
+si asimetría<0  Distribución asimétrica a la izquierda
+
+CURTIOSIS
+
+  * Coeficiente de asimetría basado en momentos
+  * asimetria = momento 4 / (desviacion estardar)^4
+
+  * Curtosis(Apuntamiento)= Mide cómo de achatada o apuntada es la curva y cómo se agrupan valores en torno a la media
+  
+Desicion:
+Si kurtosis<3 la distribución es Platicúrtica
+Si kurtosis=3 la distribución es Mesocúrtica
+Si kurtosis>3 la distribución es Leptocúrtica
+
+```{r}
+# Son medidas que representan la asimetria de la distribucion y el achatamiento o no de la misma. Para obtener estas dos medidas utilizaremos el paquete {moments}
+
+# install.packages("moments") #Funcion que instala paquete
+library(moments)
+skewness(bdj$s02a_03) # edad asimetria 
+# distribucioon asimetrica a la derecha 
+kurtosis(bdj$s02a_03) #  edad curtosis
+# la distribucion es platicurtica 
+
+```
+#*************************************************************
+
+
+
+
+
